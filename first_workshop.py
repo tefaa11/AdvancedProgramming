@@ -10,7 +10,7 @@ Author: Carol Stefanya Velasco Rodríguez
 from abc import ABC, abstractmethod
 
 
-class AbstractStore(ABC):
+class Abstract_Store(ABC):
     """
     Abstract class that defines the behavior of a store.
 
@@ -35,7 +35,7 @@ class AbstractStore(ABC):
         pass
 
 
-class Store(AbstractStore):
+class Store(Abstract_Store):
     """
     Concrete class that implements the behavior of a store.
 
@@ -61,6 +61,9 @@ class Store(AbstractStore):
         add_product: Adds a product to the cart.
         remove_product: Removes a product from the cart.
         pay: Pays for the products in the cart.
+        view_cart: Displays the products in the cart.
+        search_by_brand: Searches for products by brand.
+        search_by_price: Searches for products by price.
     """
 
     def __init__(self):
@@ -75,27 +78,45 @@ class Store(AbstractStore):
             2: "Computadores",
             3: "Televisores",
             4: "Consolas de videojuego",
+            5: "Accesorios electrónicos",
         }
         self.products_by_category = {
             "Celulares": {
-                1: {"nombre": "Samsung S24 ultra", "precio": 4400000},
-                2: {"nombre": "Iphone 15 pro max", "precio": 4250000},
-                3: {"nombre": "Xiaomi 14 ultra", "precio": 4220000},
+                1: {
+                    "nombre": "Samsung S24 ultra",
+                    "precio": 4400000,
+                    "marca": "Samsung",
+                },
+                2: {"nombre": "Iphone 15 pro max", "precio": 4250000, "marca": "Apple"},
+                3: {"nombre": "Xiaomi 14 ultra", "precio": 4220000, "marca": "Xiaomi"},
             },
             "Computadores": {
-                1: {"nombre": "HP x360 convertible", "precio": 4700000},
-                2: {"nombre": "MacBook Air 15", "precio": 7000000},
-                3: {"nombre": "HP x360 convertible", "precio": 4700000},
+                1: {"nombre": "HP x360 convertible", "precio": 4700000, "marca": "HP"},
+                2: {"nombre": "MacBook Air 15", "precio": 7000000, "marca": "Apple"},
+                3: {"nombre": "HP x360 convertible", "precio": 4700000, "marca": "HP"},
             },
             "Televisores": {
-                1: {"nombre": "Sony 4k", "precio": 1300000},
-                2: {"nombre": "Samsung QLED", "precio": 1700000},
-                3: {"nombre": "LG OLED", "precio": 1500000},
+                1: {"nombre": "Sony 4k", "precio": 1300000, "marca": "Sony"},
+                2: {"nombre": "Samsung QLED", "precio": 1700000, "marca": "Samsung"},
+                3: {"nombre": "LG OLED", "precio": 1500000, "marca": "LG"},
             },
             "Consolas de videojuego": {
-                1: {"nombre": "PlayStation 5", "precio": 3500000},
-                2: {"nombre": "Xbox Series x", "precio": 3200000},
-                3: {"nombre": "Nintendo Switch", "precio": 2500000},
+                1: {"nombre": "PlayStation 5", "precio": 3500000, "marca": "Sony"},
+                2: {"nombre": "Xbox Series x", "precio": 3200000, "marca": "Microsoft"},
+                3: {
+                    "nombre": "Nintendo Switch",
+                    "precio": 2500000,
+                    "marca": "Nintendo",
+                },
+            },
+            "Accesorios electrónicos": {
+                1: {"nombre": "Cargador USB-C", "precio": 50000, "marca": "Motorola"},
+                2: {
+                    "nombre": "Auriculares inalámbricos",
+                    "precio": 150000,
+                    "marca": "Sony",
+                },
+                3: {"nombre": "Batería portátil", "precio": 200000, "marca": "HP"},
             },
         }
         self.cart = []
@@ -158,7 +179,10 @@ class Store(AbstractStore):
         print("1. Agregar producto al carrito")
         print("2. Eliminar producto del carrito")
         print("3. Pagar")
-        print("4. Salir")
+        print("4. Ver carrito")
+        print("5. Buscar por marca")
+        print("6. Buscar por precio")
+        print("7. Salir")
 
     def display_categories(self):
         """
@@ -271,6 +295,67 @@ class Store(AbstractStore):
         else:
             print("No hay productos en el carrito")
 
+    def view_cart(self):
+        """
+        Displays the products in the cart.
+
+        This method displays the products in the cart, including the product name
+        and price.
+        """
+        if len(self.get_cart()) > 0:
+            print("Productos en el carrito:")
+            for i, product in enumerate(self.get_cart()):
+                print(
+                    f"{i+1}. {product['Categoria']} - {product['Producto']['nombre']} - {product['Producto']['precio']}"
+                )
+        else:
+            print("No hay productos en el carrito")
+
+    def search_by_brand(self):
+        """
+        Searches for products by brand.
+
+        This method searches for products by brand, including the product name and
+        price.
+        """
+        brand = input("Ingrese la marca que desea buscar: ")
+        found_products = []
+        for category, products in self.get_products_by_category().items():
+            for product in products.values():
+                if product["marca"].lower() == brand.lower():
+                    found_products.append({"Categoria": category, "Producto": product})
+        if len(found_products) > 0:
+            print("Productos encontrados:")
+            for i, product in enumerate(found_products):
+                print(
+                    f"{i+1}. {product['Categoria']} - {product['Producto']['nombre']} - {product['Producto']['precio']}"
+                )
+        else:
+            print("No se encontraron productos con esa marca")
+
+    def search_by_price(self):
+        """
+        Searches for products by price.
+
+        This method searches for products by price, including the product name and
+        price.
+        """
+        min_price = int(input("Ingrese el precio minimo: "))
+        max_price = int(input("Ingrese el precio maximo: "))
+        found_products = []
+        for category, products in self.get_products_by_category().items():
+            for product in products.values():
+                if min_price <= product["precio"] <= max_price:
+                    found_products.append({"Categoria": category, "Producto": product})
+        if len(found_products) > 0:
+            print("Productos encontrados:")
+            for i, product in enumerate(found_products):
+                print(
+                    f"{i+1}. {product['Categoria']} - {product['Producto']['nombre']} - {product['Producto']['precio']}"
+                )
+        else:
+            print("No se encontraron productos con ese precio")
+
 
 # inicio
 """
@@ -317,6 +402,12 @@ while True:
     elif option == "3":
         store.pay()
     elif option == "4":
+        store.view_cart()
+    elif option == "5":
+        store.search_by_brand()
+    elif option == "6":
+        store.search_by_price()
+    elif option == "7":
         print("-----Gracias por visitarnos!-----")
         break
     else:
