@@ -13,6 +13,10 @@ This repository includes all the assignments from the Advanced Programming works
     - Folder: `first_workshop`
     - Description: Applying object-oriented programming concepts an abstract store class is created, with methods that handle encapsulation, methods for adding, removing, and pay.
     - Files: Python code, Technical report.
+2. **Workshop 2:** This program shows electronic products to add to the cart and make the payment by a user, an administrator can see the number of purchases and the amount in addition to adding new products.
+    - Folder: `second_workshop`
+    - Description: Applying object-oriented programming concepts, an abstract store class is created, with methods that handle encapsulation, methods for amenja two types of people that have different methods.
+    - Files: Python code.   
    
 ## Contact Information
 
